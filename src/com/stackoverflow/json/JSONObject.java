@@ -126,9 +126,9 @@ public class JSONObject extends Hashtable implements Json {
     /**
      * Construct a JSONObject from a JSONTokener.
      * @param x A JSONTokener object containing the source string.
-     * @throws Exception If there is a syntax error in the source string.
+     * @throws JSONException If there is a syntax error in the source string.
      */
-    public JSONObject(final JSONTokener x) throws Exception {
+    public JSONObject(final JSONTokener x) throws JSONException {
         this();
         char c;
         String key;
@@ -198,9 +198,9 @@ public class JSONObject extends Hashtable implements Json {
      * @param string    A string beginning
      *  with <code>{</code>&nbsp;<small>(left brace)</small> and ending
      *  with <code>}</code>&nbsp;<small>(right brace)</small>.
-     * @exception Exception If there is a syntax error in the source string.
+     * @exception JSONException If there is a syntax error in the source string.
      */
-    public JSONObject(byte[] string) throws Exception {
+    public JSONObject(byte[] string) throws JSONException {
         this(new JSONTokener(string));
     }
 
@@ -213,11 +213,11 @@ public class JSONObject extends Hashtable implements Json {
      * @param key   A key string.
      * @param value An object to be accumulated under the key.
      * @return this.
-     * @throws Exception If the value is an invalid number
+     * @throws JSONException If the value is an invalid number
      *  or if the key is null.
      */
     public JSONObject accumulate(final String key, final Object value)
-            throws Exception {
+            throws JSONException {
         Object o = get(key);
         if (o == null) {
             put(key, value);
@@ -237,17 +237,17 @@ public class JSONObject extends Hashtable implements Json {
      * @param key   A key string.
      * @param value An object to be accumulated under the key.
      * @return this.
-     * @throws Exception If the key is null or if the current value
+     * @throws JSONException If the key is null or if the current value
      * 	associated with the key is not a JSONArray.
      */
     public JSONObject append(final String key, final Object value)
-            throws Exception {
+            throws JSONException {
         Object o = get(key);
         if (o == null) {
             put(key, new JSONArray().put(value));
         } else if (o instanceof JSONArray) {
-            throw new Exception("JSONObject[" + key +
-                    "] is not a JSONArray.");
+            throw new JSONException("JSONObject[" + key +
+                    "] is not a JSONArray.", " Key:"+key + " Value:"+value);
         } else {
             put(key, new JSONArray().put(o).put(value));
         }
@@ -260,10 +260,10 @@ public class JSONObject extends Hashtable implements Json {
      *
      * @param key   A key string.
      * @return      A JSONArray which is the value.
-     * @throws   Exception if the key is not found or
+     * @throws   JSONException if the key is not found or
      *  if the value is not a JSONArray.
      */
-    public JSONArray getJSONArray(final String key) throws Exception {
+    public JSONArray getJSONArray(final String key) throws JSONException {
         Object o = get(key);
         return o instanceof JSONArray ? (JSONArray) o : new JSONArray();
     }
@@ -277,7 +277,7 @@ public class JSONObject extends Hashtable implements Json {
      *  if the value is not a JSONObject.
      */
     public JSONObject getJSONObject(
-    		final String key) throws Exception {
+    		final String key) throws JSONException {
         Object o = get(key);
         return o instanceof JSONObject ? (JSONObject) o : null;
     }
@@ -300,11 +300,11 @@ public class JSONObject extends Hashtable implements Json {
      * @param key 	A key string.
      * @param value	A Map value.
      * @return		this.
-     * @throws Exception
+     * @throws JSONException
      */
-    public JSONObject put(final String key, final Hashtable value) throws Exception {
+    public JSONObject put(final String key, final Hashtable value) throws JSONException {
         if (key == null) {
-            throw new Exception("Null key.");
+            throw new JSONException("Null key.", " Key:" + key);
         }
         super.put(key, new JSONObject(value));
         return this;
@@ -321,9 +321,9 @@ public class JSONObject extends Hashtable implements Json {
      * @throws Exception If the value is non-finite number
      *  or if the key is null.
      */
-    public JSONObject put(final String key, final Object value) throws Exception {
+    public JSONObject put(final String key, final Object value) throws JSONException {
         if (key == null) {
-            throw new Exception("Null key.");
+            throw new JSONException("Null key.", " Key:"+key+" Value:"+(String)value);
         }
         super.put(key, value);
         return this;
@@ -451,9 +451,9 @@ public class JSONObject extends Hashtable implements Json {
      *  representation of the object, beginning
      *  with <code>{</code>&nbsp;<small>(left brace)</small> and ending
      *  with <code>}</code>&nbsp;<small>(right brace)</small>.
-     * @throws Exception If the value is or contains an invalid number.
+     * @throws JSONException If the value is or contains an invalid number.
      */
-    public static String valueToString(final Object value) throws Exception {
+    public static String valueToString(final Object value) throws JSONException {
         if (value == null || value.equals(null)) {
             return "null";
         }

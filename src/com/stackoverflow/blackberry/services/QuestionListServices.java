@@ -2,6 +2,7 @@ package com.stackoverflow.blackberry.services;
 
 import java.io.IOException;
 import com.stackoverflow.blackberry.services.callback.Callback;
+import com.stackoverflow.json.JSONException;
 
 public class QuestionListServices extends WebServices{
 
@@ -39,7 +40,7 @@ public class QuestionListServices extends WebServices{
 			
 		} catch (IOException e) {
 			System.out.println(e.toString());
-		} catch (Exception e) {
+		} catch (JSONException e) {
 			System.out.println(e.toString());
 		}
 	}

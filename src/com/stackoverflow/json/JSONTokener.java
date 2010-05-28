@@ -115,7 +115,7 @@ public class JSONTokener {
      * @return The character.
      * @throws Exception if the character does not match.
      */
-    public char next(final char c) throws Exception {
+    public char next(final char c) throws JSONException {
         char n = next();
         if (n != c) {
             throw syntaxError("Expected '" + c + "' and instead saw '" +
@@ -133,7 +133,7 @@ public class JSONTokener {
      *   Substring bounds error if there are not
      *   n characters remaining in the source string.
      */
-    public String next(final int n) throws Exception {
+    public String next(final int n) throws JSONException {
         int i = this.myIndex;
         int j = i + n;
         if (j >= this.mySource.length) {
@@ -153,7 +153,7 @@ public class JSONTokener {
      * @throws Exception
      * @return  A character, or 0 if there are no isMore characters.
      */
-    public char nextClean() throws Exception {
+    public char nextClean() throws JSONException {
         for (;;) {
             char c = next();
             if (c == '/') {
@@ -202,7 +202,7 @@ public class JSONTokener {
      * @return      A String.
      * @throws Exception Unterminated string.
      */
-    public String nextString(final char quote) throws Exception {
+    public String nextString(final char quote) throws JSONException {
         char c;
         StringBuffer sb = new StringBuffer();
         for (;;) {
@@ -298,7 +298,7 @@ public class JSONTokener {
      *
      * @return An object.
      */
-    public Object nextValue() throws Exception {
+    public Object nextValue() throws JSONException {
         char c = nextClean();
         String s;
 
@@ -381,8 +381,8 @@ public class JSONTokener {
      * @param message The error message.
      * @return  A Exception object, suitable for throwing
      */
-    public Exception syntaxError(final String message) {
-        return new Exception(message + toString());
+    public JSONException syntaxError(final String message) {
+        return new JSONException(message + toString(),"");
     }
 
     /**

@@ -27,5 +27,14 @@ public class QuestionList extends Observable{
 	public void clear() {
 		questions.removeAllElements();
 	}
+
+	public int title(String text) {
+		for (int i = 0 ; i < questions.size() ; i++) {
+			if (get(i).getTitle().equals(text)) {
+				return get(i).getId();
+			}
+		}
+		return -1;
+	}
 	
 }	

@@ -1,12 +1,15 @@
 package com.stackoverflow.blackberry.services;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
 import javax.microedition.io.Connector;
 import javax.microedition.io.HttpConnection;
 import com.stackoverflow.blackberry.services.callback.Callback;
+import com.stackoverflow.json.JSONException;
 import com.stackoverflow.json.JSONObject;
 
+import net.rim.device.api.compress.GZIPInputStream;
 import net.rim.device.api.system.DeviceInfo;
 
 public abstract class WebServices extends Thread{
@@ -18,7 +21,7 @@ public abstract class WebServices extends Thread{
 	private Vector parameters = new Vector();
 	
 	protected static final String URL = "http://api.stackoverflow.com/";
-	protected static final String VERSION = "0.7";
+	protected static final String VERSION = "0.8";
 	
 	protected static final String KEY_SECURITY = "key";
 	protected static final String KEY = "";
@@ -84,19 +87,24 @@ public abstract class WebServices extends Thread{
 	
 	public abstract void run();
 	
-	public void invoke(String url) throws Exception {
+	public synchronized void invoke(String url) throws JSONException, IOException {
 		HttpConnection con = (HttpConnection)Connector.open(url, Connector.READ_WRITE);
-		InputStream is = con.openInputStream();
-		
+		con.setRequestProperty("Accept-encoding", "gzip");
+		//TODO show an error on other response code
 		if (con.getResponseCode() != HttpConnection.HTTP_OK) {
 			System.out.println("Response Code error : " + con.getResponseCode());
 		}
-
+		
+		InputStream is = con.openInputStream();
+		GZIPInputStream gzis = new GZIPInputStream(is);
 		byte[] data = new byte[1024];
 		String datas = "";
 		int len;
-		while ((len = is.read(data)) != -1) {
+		while ((len = gzis.read(data)) != -1) {
 			datas += new String(data, 0, len);
+		}
+		if (DeviceInfo.isSimulator()) {
+			System.out.println(datas);
 		}
 		JSONObject json = new JSONObject(datas.getBytes());
 		callback.parseJSONObject(json);

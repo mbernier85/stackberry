@@ -1,8 +1,10 @@
 package com.stackoverflow.blackberry.screen;
 
 
+import com.stackoverflow.blackberry.controller.QuestionController;
 import com.stackoverflow.blackberry.controller.QuestionListController;
 import com.stackoverflow.blackberry.model.list.QuestionList;
+import com.stackoverflow.blackberry.ui.ButtonField;
 import com.stackoverflow.observer.Observable;
 import com.stackoverflow.observer.Observer;
 
@@ -10,7 +12,6 @@ import net.rim.device.api.system.Characters;
 import net.rim.device.api.ui.Field;
 import net.rim.device.api.ui.FieldChangeListener;
 import net.rim.device.api.ui.UiApplication;
-import net.rim.device.api.ui.component.ButtonField;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.container.VerticalFieldManager;
@@ -88,7 +89,14 @@ public class RecentQuestionsScreen extends ScreenTemplate implements Observer{
 	
 	private class LabelClickListener implements FieldChangeListener {
 		public void fieldChanged(Field field, int context) {
-			//TODO go to question screen
+			if (field instanceof LabelField){
+				LabelField lbl = (LabelField)field;
+				int id = -1;
+				if ((id = questions.title(lbl.getText())) != -1) {
+					new QuestionController().getQuestion(id);
+				}
+			}
+			
 		}
 	}
 	

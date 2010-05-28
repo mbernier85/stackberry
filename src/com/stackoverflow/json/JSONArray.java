@@ -85,7 +85,7 @@ public class JSONArray extends Vector implements Json {
     public JSONArray() {
     }
 
-    public JSONArray(final byte[] x) throws Exception {
+    public JSONArray(final byte[] x) throws JSONException {
         this(new JSONTokener(x));
     }
 
@@ -94,7 +94,7 @@ public class JSONArray extends Vector implements Json {
      * @param x A JSONTokener
      * @throws Exception If there is a syntax error.
      */
-    public JSONArray(final JSONTokener x) throws Exception {
+    public JSONArray(final JSONTokener x) throws JSONException {
         this();
         if (x.nextClean() != '[') {
             throw x.syntaxError("A JSONArray text must start with '['");
@@ -215,9 +215,9 @@ public class JSONArray extends Vector implements Json {
      * @throws Exception If the index is negative or if the the value is
      *  an invalid number.
      */
-    public JSONArray put(final int index, final Object value) throws Exception {
+    public JSONArray put(final int index, final Object value) throws JSONException {
         if (index < 0) {
-            throw new Exception("JSONArray[" + index + "] not found.");
+            throw new JSONException("JSONArray[" + index + "] not found.", " Value:"+(String)value);
         }
         if (index < size()) {
             this.setElementAt(value, index);

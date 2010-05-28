@@ -1,19 +1,27 @@
 package com.stackoverflow.blackberry.model;
 
+import java.util.Calendar;
+import java.util.Date;
+
+import com.stackoverflow.json.JSONArray;
+import com.stackoverflow.json.JSONException;
+import com.stackoverflow.json.JSONObject;
+import com.stackoverflow.observer.Observable;
+
 /**
  * 
  * @author michael
  *
  */
-public class User {
+public class User extends Observable {
 	private int id;
 	private String userType;		//"moderator"
-	private String creationDate;	//1217514151
+	private Date creationDate;	//1217514151
 	private String displayName;		//"Jeff Atwood"
 	private int reputation; 		//12880
 	private String emailHash;		//51d623f33f8b83095db84ff35e15dbe8
 	private int age;				//39
-	private String lastAccessDate;	//1270437003
+	private Date lastAccessDate;	//1270437003
 	private String websiteUrl;		//"http://www.codinghorror.com/blog/"
 	private String location; 		//El Cerrito, CA";
 	private String aboutMe; 		//<img src=\"http://img377.imageshack.us/img377/4074/wargames1xr6.jpg\" width=\"220\">\r\n<br>\r\n<br>\r\n<a href=\"http://www.codinghorror.com/blog/archives/001169.html\" rel=\"nofollow\">Stack Overflow Valued Associate #00001</a>\r\n",
@@ -24,55 +32,77 @@ public class User {
 	private int downVoteCount;		//432
 	private int acceptRate;			//100
 	
+	private static final String KEY_ID = "user_id";
+	private static final String KEY_ANSWER_COUNT = "answer_count";
+	private static final String KEY_DISPLAY_NAME = "display_name";
+	private static final String KEY_CREATION_DATE = "creation_date";
+	private static final String KEY_LAST_ACCESS_DATE = "last_access_date";
+	private static final String KEY_AGE = "age";
+	private static final String KEY_ABOUT_ME = "about_me";
+	private static final String KEY_EMAIL_HASH = "email_hash";
+	private static final String KEY_USER_TYPE = "user_type";
+	private static final String KEY_REPUTATION = "reputation";
+	private static final String KEY_QUESTION_COUNT = "question_count";
+	private static final String KEY_WEBSITE_URL = "website_url";
+	private static final String KEY_VIEW_COUNT = "view_count";
+	private static final String KEY_LOCATION = "location";
+	private static final String KEY_UP_VOTE_COUNT = "up_vote_count";
+	private static final String KEY_DOWN_VOTE_COUNT = "down_vote_count";
+	
 	public User() {
 		
 	}
 
-
-	/**
-	 * @param id
-	 * @param userType
-	 * @param creationDate
-	 * @param displayName
-	 * @param reputation
-	 * @param emailHash
-	 * @param age
-	 * @param lastAccessDate
-	 * @param websiteUrl
-	 * @param location
-	 * @param aboutMe
-	 * @param questionCount
-	 * @param answerCount
-	 * @param viewCount
-	 * @param upVoteCount
-	 * @param downVoteCount
-	 * @param acceptRate
-	 */
-	public User(final int id, final String userType, final String creationDate,
-			final String displayName, final int reputation, final String emailHash, final int age,
-			final String lastAccessDate, final String websiteUrl, final String location,
-			final String aboutMe, final int questionCount, final int answerCount, int viewCount,
-			final int upVoteCount, final int downVoteCount, final int acceptRate) {
-		this.id = id;
-		this.userType = userType;
-		this.creationDate = creationDate;
-		this.displayName = displayName;
-		this.reputation = reputation;
-		this.emailHash = emailHash;
-		this.age = age;
-		this.lastAccessDate = lastAccessDate;
-		this.websiteUrl = websiteUrl;
-		this.location = location;
-		this.aboutMe = aboutMe;
-		this.questionCount = questionCount;
-		this.answerCount = answerCount;
-		this.viewCount = viewCount;
-		this.upVoteCount = upVoteCount;
-		this.downVoteCount = downVoteCount;
-		this.acceptRate = acceptRate;
+	public void parseJson(JSONObject json) throws JSONException {
+		this.id = Integer.parseInt((String)json.get(KEY_ID));
+		this.answerCount = Integer.parseInt((String)json.get(KEY_ANSWER_COUNT));
+		this.displayName = (String)json.get(KEY_DISPLAY_NAME);
+		this.location = (String)json.get(KEY_LOCATION);
+		this.emailHash = (String)json.get(KEY_EMAIL_HASH);
+		this.websiteUrl = (String)json.get(KEY_WEBSITE_URL);
+		this.aboutMe = (String)json.get(KEY_ABOUT_ME);
+		this.reputation = Integer.parseInt((String)json.get(KEY_REPUTATION));
+		this.userType = (String)json.get(KEY_USER_TYPE);
+		this.questionCount = Integer.parseInt((String)json.get(KEY_QUESTION_COUNT));
+		this.upVoteCount = Integer.parseInt((String)json.get(KEY_UP_VOTE_COUNT));
+		this.downVoteCount = Integer.parseInt((String)json.get(KEY_DOWN_VOTE_COUNT));
+		this.viewCount = Integer.parseInt((String)json.get(KEY_VIEW_COUNT));
+		this.creationDate = 
+			new Date(1000*Long.parseLong((String)json.get(KEY_CREATION_DATE)));
+		this.lastAccessDate = 
+			new Date(1000*Long.parseLong((String)json.get(KEY_LAST_ACCESS_DATE)));
+		try {
+			this.age = Integer.parseInt((String)json.get(KEY_AGE));
+		} catch (NumberFormatException e) {
+			this.age = 0;
+		}
 	}
 
-
+	public String getLastAccessDateString() {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(getLastAccessDate());
+		
+		String lastAccessDate = 
+			cal.get(Calendar.YEAR) + "/" +
+			cal.get(Calendar.MONTH) + "/"+ 
+			cal.get(Calendar.DAY_OF_MONTH) + " " + 
+			cal.get(Calendar.HOUR_OF_DAY) + ":" + 
+			cal.get(Calendar.MINUTE) + ":" + 
+			cal.get(Calendar.SECOND);
+		return lastAccessDate;
+	}
+	
+	public String getCreationDateString() {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(getCreationDate());
+		
+		String creationDate = 
+			cal.get(Calendar.YEAR) + "/" +
+			cal.get(Calendar.MONTH) + "/"+ 
+			cal.get(Calendar.DAY_OF_MONTH);
+		return creationDate;
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -81,7 +111,7 @@ public class User {
 		return userType;
 	}
 
-	public String getCreationDate() {
+	public Date getCreationDate() {
 		return creationDate;
 	}
 
@@ -101,7 +131,7 @@ public class User {
 		return age;
 	}
 
-	public String getLastAccessDate() {
+	public Date getLastAccessDate() {
 		return lastAccessDate;
 	}
 
