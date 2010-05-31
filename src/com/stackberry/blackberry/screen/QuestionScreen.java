@@ -8,7 +8,6 @@ import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.component.EditField;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
-import com.stackberry.blackberry.controller.QuestionController;
 import com.stackberry.blackberry.controller.UserController;
 import com.stackberry.blackberry.model.Question;
 import com.stackberry.blackberry.ui.LabelField;
@@ -34,10 +33,16 @@ public class QuestionScreen extends ScreenTemplate implements Observer{
 			lbl.setFont(Font.getDefault().derive(Font.BOLD));
 			lbl.setPadding(5, 5, 5, 5);
 			vfm.add(lbl);
+			
 			EditField field = new EditField("",question.getQuestion());
 			field.setEditable(false);
 			field.setPadding(5,5,5,5);
 			vfm.add(field);
+			
+			lbl  = new LabelField(question.getOwnerDisplayName(), LabelField.RIGHT | LabelField.FOCUSABLE);
+			lbl.setPadding(0,5,0,0);
+			lbl.setChangeListener(new QuestionUserClickListener());
+			vfm.add(lbl);
 			
 			lbl = new LabelField("Answers");
 			lbl.setFont(Font.getDefault().derive(Font.BOLD));
@@ -52,7 +57,7 @@ public class QuestionScreen extends ScreenTemplate implements Observer{
 				lbl = new LabelField(question.getAnswer(i).getOwnerDisplayName(),
 						LabelField.FIELD_RIGHT | LabelField.FOCUSABLE);
 				lbl.setPadding(0,5,0,0);
-				lbl.setChangeListener(new UserClickListener());
+				lbl.setChangeListener(new AnswerUserClickListener());
 				vfm.add(lbl);
 			}
 			
@@ -60,7 +65,18 @@ public class QuestionScreen extends ScreenTemplate implements Observer{
 		}
 	}
 	
-	private class UserClickListener implements FieldChangeListener {
+	private class QuestionUserClickListener implements FieldChangeListener {
+		public void fieldChanged(Field field, int context) {
+			if (context == ACTION_INVOKE) {
+				int id = -1;
+				if ((id = question.getUserId()) != -1) {
+					new UserController().getUser(id);
+				}
+			}
+		}
+	}
+	
+	private class AnswerUserClickListener implements FieldChangeListener {
 		public void fieldChanged(Field field, int context) {
 			if (context == ACTION_INVOKE) {
 				LabelField lbl = (LabelField)field;

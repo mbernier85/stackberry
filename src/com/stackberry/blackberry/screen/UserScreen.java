@@ -56,7 +56,7 @@ public class UserScreen extends ScreenTemplate implements Observer{
 			
 			this.add(grid);
 			
-			EditField about = new EditField("",user.getAboutMe(),user.getAboutMe().length(), EditField.FOCUSABLE);
+			EditField about = new EditField("",user.getAboutMe(),user.getAboutMe().length()+1, EditField.FOCUSABLE);
 			about.setEditable(false);
 			this.add(about);
 			

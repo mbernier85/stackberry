@@ -1,6 +1,5 @@
 package com.stackberry.blackberry.screen;
 
-
 import com.stackberry.blackberry.controller.QuestionController;
 import com.stackberry.blackberry.controller.QuestionListController;
 import com.stackberry.blackberry.model.list.QuestionList;
@@ -73,8 +72,6 @@ public class RecentQuestionsScreen extends ScreenTemplate implements Observer{
 		}
 	}
 	
-
-	
 	private class NextButtonListener implements FieldChangeListener {
 		public void fieldChanged(Field field, int context) {
 			controller.getNextPage();
@@ -96,7 +93,6 @@ public class RecentQuestionsScreen extends ScreenTemplate implements Observer{
 					new QuestionController().getQuestion(id);
 				}
 			}
-			
 		}
 	}
 	
@@ -118,7 +114,5 @@ public class RecentQuestionsScreen extends ScreenTemplate implements Observer{
 			fieldChangeNotify(LabelField.ACTION_INVOKE);
 			return super.navigationClick(status, time);
 		}
-		
-		
 	}
 }

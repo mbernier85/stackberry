@@ -20,13 +20,19 @@ public class Question extends Observable{
 	private int answerCount;
 	private AnswerList answers;
 	private String ownerDisplayName;
+	private int userId;
 
+	public int getUserId() {
+		return userId;
+	}
 
 	private static final String KEY_ID = "question_id";
 	private static final String KEY_TITLE = "title";
 	private static final String KEY_QUESTION = "body";
 	private static final String KEY_ANSWER_COUNT = "answer_count";
-	private static final String KEY_OWNER_DISPLAY_NAME = "owner_display_name";
+	private static final String KEY_OWNER_DISPLAY_NAME = "display_name";
+	private static final String KEY_OWNER_USER_ID ="user_id";
+	private static final String KEY_OWNER = "owner";
 	
 	/**
 	 * 
@@ -40,7 +46,10 @@ public class Question extends Observable{
 		this.title = (String)json.get(KEY_TITLE);
 		this.question = (String)json.get(KEY_QUESTION);
 		this.answerCount = Integer.parseInt((String)json.get(KEY_ANSWER_COUNT));
-		this.ownerDisplayName = (String)json.get(KEY_OWNER_DISPLAY_NAME);
+		JSONObject owner = json.getJSONObject(KEY_OWNER);
+		
+		this.ownerDisplayName = (String)owner.get(KEY_OWNER_DISPLAY_NAME);
+		this.userId = Integer.parseInt((String)owner.get(KEY_OWNER_USER_ID));
 		
 		Answer answer;
 		JSONArray array = json.getJSONArray("answers");
