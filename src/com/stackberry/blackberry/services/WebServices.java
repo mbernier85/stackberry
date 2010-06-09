@@ -90,9 +90,13 @@ public abstract class WebServices extends Thread{
 	public abstract void run();
 	
 	public synchronized void invoke(String url) throws JSONException, IOException {
+		if (DeviceInfo.isSimulator()) {
+			System.out.println("url" + url);
+		}
 		HttpConnection con = (HttpConnection)Connector.open(url, Connector.READ_WRITE);
 		con.setRequestProperty("Accept-encoding", "gzip");
 		//TODO show an error on other response code
+		
 		if (con.getResponseCode() != HttpConnection.HTTP_OK) {
 			System.out.println("Response Code error : " + con.getResponseCode());
 		}

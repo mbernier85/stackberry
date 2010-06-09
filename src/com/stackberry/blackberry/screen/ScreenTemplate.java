@@ -8,7 +8,7 @@ import net.rim.device.api.ui.Screen;
 import net.rim.device.api.ui.component.LabelField;
 import net.rim.device.api.ui.container.MainScreen;
 
-public class ScreenTemplate extends  MainScreen{
+public abstract class ScreenTemplate extends  MainScreen{
 	
 	private final static String[] TITLE = {"Stack Overflow","Super User", "Server Fault"};	
 	private String title;
@@ -25,6 +25,7 @@ public class ScreenTemplate extends  MainScreen{
 		this.addMenuItem(new Menus.MenuServerfault("Serverfault", 10013, 10));
 	}
 	
+	public abstract void refresh();
 	
 	public void paintTitle() {
 		LabelField lbl = new LabelField(TITLE[Config.getSite()] + " :: " + title);

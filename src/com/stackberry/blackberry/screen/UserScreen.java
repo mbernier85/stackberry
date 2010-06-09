@@ -4,6 +4,7 @@ import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.component.EditField;
 import net.rim.device.api.ui.container.GridFieldManager;
 
+import com.stackberry.blackberry.controller.UserController;
 import com.stackberry.blackberry.model.User;
 import com.stackberry.blackberry.ui.LabelField;
 import com.stackberry.observer.Observable;
@@ -11,14 +12,22 @@ import com.stackberry.observer.Observer;
 
 public class UserScreen extends ScreenTemplate implements Observer{
 
-	public UserScreen(String title) {
+	private UserController controller;
+	private User user;
+	
+	public UserScreen(String title, UserController controller, User user) {
 		super(title);
 		LabelField lbl = new LabelField("Loading user information...");
 		this.add(lbl);
+		this.controller = controller;
+		this.user = user;
 	}
 
+	public void refresh() {
+		controller.refreshUserScreen();
+	}
+	
 	public void update(Observable observable, Object object) {
-		User user = (User)object;
 		synchronized (UiApplication.getEventLock()) {
 			this.deleteAll();
 			

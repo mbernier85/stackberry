@@ -13,12 +13,15 @@ public class QuestionService extends WebServices {
 	private static final String KEY_PAGE_SIZE = "pagesize";
 	private static final String KEY_BODY = "body";
 	private static final String BODY = "true";
+	private static final String KEY_PAGE = "page";
 	
+	private int answerPage = 0;
 	private int questionId;
 	
-	public QuestionService(Callback callback, int questionId) {
+	public QuestionService(Callback callback, int questionId, int answerPage) {
 		super(callback);
 		this.questionId = questionId;
+		this.answerPage = answerPage;
 	}
 
 	public void run() {
@@ -28,6 +31,7 @@ public class QuestionService extends WebServices {
 			addGetParameter(KEY_SECURITY, KEY);
 			addGetParameter(KEY_PAGE_SIZE, PAGE_SIZE);
 			addGetParameter(KEY_BODY, BODY);
+			addGetParameter(KEY_PAGE, answerPage);
 			
 			String url = null;
 			if ((url = getUrl() ) != null) {

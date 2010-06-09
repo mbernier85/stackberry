@@ -8,13 +8,24 @@ import com.stackberry.blackberry.services.UserService;
 import com.stackberry.blackberry.services.callback.UserCallback;
 
 public class UserController {
-	public void getUser(int userId) {
-		User user = new User();
-		UserScreen screen =  new UserScreen("User");
+	
+	private UserScreen screen;
+	private User user;
+	
+	public UserController() {
+		user = new User();
+		screen =  new UserScreen("User", this, user);
 		user.addObserver(screen);
-		UiApplication.getUiApplication().pushScreen(screen);
+	}
+	
+	public void refreshUserScreen() {
 		UserCallback callback = new UserCallback(user);
-		UserService service = new UserService(callback, userId);
+		UserService service = new UserService(callback, user.getId());
 		service.start();
+	}
+	
+	public void getUser(int userId) {
+		UiApplication.getUiApplication().pushScreen(screen);
+		refreshUserScreen();
 	}
 }

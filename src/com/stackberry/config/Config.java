@@ -21,6 +21,7 @@ public class Config {
 		Screen screen = UiApplication.getUiApplication().getActiveScreen();
 		if (screen instanceof ScreenTemplate) {
 			((ScreenTemplate) screen).paintTitle();
+			((ScreenTemplate) screen).refresh();
 		}
 	}
 }

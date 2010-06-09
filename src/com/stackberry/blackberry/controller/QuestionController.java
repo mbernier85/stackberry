@@ -9,17 +9,35 @@ import com.stackberry.blackberry.services.callback.QuestionCallback;
 
 public class QuestionController {
 	
+	private int page = 1;
+	private Question question;
+	private QuestionScreen screen;
+	
 	public QuestionController() {
+		question = new Question();
+		screen =  new QuestionScreen("Question", this);
+		question.addObserver(screen);
 
 	}
 	
-	public void getQuestion(int id) {
-		Question question = new Question();
-		QuestionScreen screen =  new QuestionScreen("Question");
-		question.addObserver(screen);
+	public void getNextPage() {
+		page++;
+		QuestionCallback callback = new QuestionCallback(question);
+		QuestionService service = new QuestionService(callback, question.getId(), page);
+		service.start();
+	}
+	
+	public void getFirstPage() {
+		page = 1;
+		QuestionCallback callback = new QuestionCallback(question);
+		QuestionService service = new QuestionService(callback, question.getId(), page);
+		service.start();
+	}
+	
+	public void getQuestion(int id, int page) {
 		UiApplication.getUiApplication().pushScreen(screen);
 		QuestionCallback callback = new QuestionCallback(question);
-		QuestionService service = new QuestionService(callback, id);
+		QuestionService service = new QuestionService(callback, id, page);
 		service.start();
 	}
 }

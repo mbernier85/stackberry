@@ -11,7 +11,7 @@ public class QuestionListServices extends WebServices{
 	private static final String METHOD = "questions";
 	
 	private static final String KEY_SORT = "sort";
-	private static final String VALUE_SORT = "newest";
+	private static final String VALUE_SORT = "creation";
 	private static final String KEY_PAGE_SIZE = "pagesize";
 	private static final String PAGE_SIZE = "5";
 	private static final String KEY_PAGE = "page";

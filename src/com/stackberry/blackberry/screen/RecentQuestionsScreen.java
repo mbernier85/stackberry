@@ -72,6 +72,10 @@ public class RecentQuestionsScreen extends ScreenTemplate implements Observer{
 		}
 	}
 	
+	public void refresh() {
+		controller.getFirstPage();
+	}
+	
 	private class NextButtonListener implements FieldChangeListener {
 		public void fieldChanged(Field field, int context) {
 			controller.getNextPage();
@@ -90,7 +94,7 @@ public class RecentQuestionsScreen extends ScreenTemplate implements Observer{
 				LabelField lbl = (LabelField)field;
 				int id = -1;
 				if ((id = questions.title(lbl.getText())) != -1) {
-					new QuestionController().getQuestion(id);
+					new QuestionController().getQuestion(id, 0);
 				}
 			}
 		}

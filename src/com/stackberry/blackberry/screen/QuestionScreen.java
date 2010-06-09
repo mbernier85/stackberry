@@ -6,10 +6,13 @@ import net.rim.device.api.ui.Font;
 import net.rim.device.api.ui.Manager;
 import net.rim.device.api.ui.UiApplication;
 import net.rim.device.api.ui.component.EditField;
+import net.rim.device.api.ui.container.HorizontalFieldManager;
 import net.rim.device.api.ui.container.VerticalFieldManager;
 
+import com.stackberry.blackberry.controller.QuestionController;
 import com.stackberry.blackberry.controller.UserController;
 import com.stackberry.blackberry.model.Question;
+import com.stackberry.blackberry.ui.ButtonField;
 import com.stackberry.blackberry.ui.LabelField;
 import com.stackberry.observer.Observable;
 import com.stackberry.observer.Observer;
@@ -17,11 +20,14 @@ import com.stackberry.observer.Observer;
 public class QuestionScreen extends ScreenTemplate implements Observer{
 
 	private Question question;
+	private QuestionController controller;
+	private VerticalFieldManager vfmAnswers;
 	
-	public QuestionScreen(String title) {
+	public QuestionScreen(String title, QuestionController controller) {
 		super(title);
 		LabelField lbl = new LabelField("Loading question...");
 		super.add(lbl);
+		this.controller = controller;
 	}
 
 	public void update(Observable observable, Object object) {
@@ -48,20 +54,55 @@ public class QuestionScreen extends ScreenTemplate implements Observer{
 			lbl.setFont(Font.getDefault().derive(Font.BOLD));
 			lbl.setPadding(5, 5, 5, 5);
 			vfm.add(lbl);
-			
-			for (int i = 0 ; i < question.getAnswers().size() ; i++) {
-				field = new EditField("",question.getAnswer(i).getBody());
-				field.setEditable(false);
-				field.setPadding(5,5,5,5);
-				vfm.add(field);
-				lbl = new LabelField(question.getAnswer(i).getOwnerDisplayName(),
-						LabelField.FIELD_RIGHT | LabelField.FOCUSABLE);
-				lbl.setPadding(0,5,0,0);
-				lbl.setChangeListener(new AnswerUserClickListener());
-				vfm.add(lbl);
-			}
-			
 			super.add(vfm);
+			
+			showAnswer();
+			
+			HorizontalFieldManager hfm = new HorizontalFieldManager();
+			ButtonField button = new ButtonField("First page");
+			button.setChangeListener(new FirstAnswerPageClickListener());
+			hfm.add(button);
+			button = new ButtonField("Next page");
+			button.setChangeListener(new NextAnswerPageClickListener());
+			hfm.add(button);
+			super.add(hfm);
+			
+		}
+	}
+	
+	private void showAnswer() {
+		
+		vfmAnswers = new VerticalFieldManager();
+		
+		EditField field = new EditField();
+		LabelField lbl = new LabelField();
+		for (int i = 0 ; i < question.getAnswers().size() ; i++) {
+			field = new EditField("",question.getAnswer(i).getBody());
+			field.setEditable(false);
+			field.setPadding(5,5,5,5);
+			vfmAnswers.add(field);
+			lbl = new LabelField(question.getAnswer(i).getOwnerDisplayName(),
+					LabelField.FIELD_RIGHT | LabelField.FOCUSABLE);
+			lbl.setPadding(0,5,0,0);
+			lbl.setChangeListener(new AnswerUserClickListener());
+			vfmAnswers.add(lbl);
+		}
+		super.add(vfmAnswers);
+	}
+	
+	private class FirstAnswerPageClickListener implements FieldChangeListener {
+		public void fieldChanged(Field field, int context) {
+			controller.getFirstPage();
+		}
+	}
+	
+	public void refresh() {
+		controller.getFirstPage();
+	}
+	
+	private class NextAnswerPageClickListener implements FieldChangeListener {
+		public void fieldChanged(Field arg0, int arg1) {
+			controller.getNextPage();
 		}
 	}
 	
