@@ -2,7 +2,6 @@ package com.stackberry.blackberry.model;
 
 import java.util.Date;
 
-import com.stackberry.json.JSONArray;
 import com.stackberry.json.JSONException;
 import com.stackberry.json.JSONObject;
 import com.stackberry.observer.Observable;

@@ -25,6 +25,7 @@ public class UserController {
 	}
 	
 	public void getUser(int userId) {
+		user.setId(userId);
 		UiApplication.getUiApplication().pushScreen(screen);
 		refreshUserScreen();
 	}

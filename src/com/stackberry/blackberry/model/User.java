@@ -3,7 +3,6 @@ package com.stackberry.blackberry.model;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.stackberry.json.JSONArray;
 import com.stackberry.json.JSONException;
 import com.stackberry.json.JSONObject;
 import com.stackberry.observer.Observable;
@@ -169,6 +168,11 @@ public class User extends Observable {
 
 	public int getAcceptRate() {
 		return acceptRate;
+	}
+
+	public void setId(int userId) {
+		this.id = userId;
+		
 	}
 	
 	

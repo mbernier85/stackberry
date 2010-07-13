@@ -23,8 +23,7 @@ public abstract class WebServices extends Thread{
 	
 	protected static final String[] URL = {"http://api.stackoverflow.com/", 
 		"http://api.superuser.com/","http://api.serverfault.com/"};
-	protected static final String VERSION = "0.8";
-	
+	protected static final String VERSION = "1.0";
 	protected static final String KEY_SECURITY = "key";
 	protected static final String KEY = "";
 	
